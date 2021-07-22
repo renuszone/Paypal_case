@@ -1,5 +1,5 @@
-# Paypal_case
-Case submission for Paypal
+#import data
+setwd("C:/Users/SELVARE2/OneDrive - Novartis Pharma AG/Desktop/Personal/Case2")
 input<-read.csv("data.csv")
 #loop to calculate rank
 #to store updated values
@@ -20,7 +20,8 @@ ari_hand<-chisq.test(input_up[which(input_up$name=="Arielle"),]$hand,input_up[wh
 #it is not significant for Arielle
 #using both the variables for AOV
 input_up$Rank<-as.character(input_up$Rank)
-aov_op<-aov(score~name+hand,data=input_up)
+aov_op<-aov(score~name,data=input_up)
+
 summary(aov_op)
 aov_op<-aov(score~name*hand,data=input_up)
 summary(aov_op)
@@ -29,3 +30,11 @@ summary(aov_op)
 #regardless of the using rank or score, only hand is turning out to be significant, not the names
 #hence of Arielle and Boris none is better than the other
 chisq.test(input_up$Rank,input_up$name)
+
+#trying name hand combo
+input_up$nam_hand<-paste(input_up$name,input_up$hand,sep="_")
+aov_op<-aov(score~nam_hand,data=input_up)
+summary(aov_op)
+#this is significant
+#post hoc analysis
+TukeyHSD(aov_op, conf.level = 0.95)
